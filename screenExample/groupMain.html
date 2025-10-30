@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>PerformProject - Group Main</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Noto Sans KR', 'Roboto', Arial, sans-serif;
+            background: #eee;
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        /* 20:9 비율을 위한 wrapper */
+        .mobile-wrapper {
+            width: 400px;
+            height: 900px;
+            max-width: 100vw;
+            max-height: 95vh;
+            background: #f5f5f5;
+            box-shadow: 0 8px 32px rgba(80,80,90,0.11), 0 1.5px 6px rgba(0,0,0,0.03);
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .android-status-bar {
+            height: 24px;
+            background: #222;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 12px;
+            justify-content: space-between;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+        }
+        .android-header {
+            background: #1877f2;
+            color: #fff;
+            padding: 24px 0 20px 0; /* 상하 패딩 두 배로 증가 */
+            display: flex; /* flex 레이아웃 적용 */
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            font-size: 19px;
+            font-weight: bold;
+            box-shadow: 0 1.5px 5px rgba(0,0,0,0.06);
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .settings-icon-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .settings-icon-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: #fff;
+        }
+        .main-scroll {
+            flex: 1 1 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            width: 100%;
+            background: #fff;
+            position: relative;
+        }
+        .main-container {
+            width: 100%;
+            height: auto;
+            min-height: 0;
+            box-sizing: border-box;
+            padding-top: 20px;
+            padding-bottom: 80px;
+            background: #fff;
+            position: relative;
+        }
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 -1px 9px rgba(80,80,90,0.09);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-radius: 16px 16px 0 0;
+            z-index: 20;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #a0a0a0;
+            font-size: 13px;
+        }
+        .nav-item.active {
+            color: #1877f2;
+            font-weight: bold;
+        }
+        .nav-icon {
+            width: 36px;
+            height: 36px;
+            margin-bottom: 2px;
+            display: block;
+        }
+        .group-card {
+            box-shadow: 0 2px 8px rgba(30,60,140,0.05);
+            border-radius: 16px;
+            background: #fff;
+            margin: 22px auto 0 auto;
+            width: 94%;
+            max-width: 340px;
+            padding: 18px 20px 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        .group-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+        .group-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1877f2;
+            margin-right: 10px;
+        }
+        .group-desc {
+            font-size: 1rem;
+            color: #555;
+        }
+        .group-tags {
+            margin-top: 4px;
+        }
+        .group-tag {
+            display: inline-block;
+            background: #f0f2fa;
+            color: #8787c1;
+            border-radius: 8px;
+            font-size: 0.93rem;
+            padding: 2.5px 10px;
+            margin-right: 7px;
+        }
+        .group-status {
+            margin-top: 7px;
+            color: #999;
+            font-size: 0.97rem;
+            font-weight: 500;
+        }
+        .group-today {
+            color: #1877f2;
+            font-weight: bold;
+        }
+        .group-total {
+            font-weight: 600;
+        }
+        .group-search-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 57px;
+            height: 57px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            position: absolute;
+            right: 18px;
+            bottom: -20px;
+            box-shadow: 0 2.5px 12px rgba(80,80,150,0.10);
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+            outline: none;
+            z-index: 10;
+            margin: 0;
+        }
+        .group-search-btn:active {
+            box-shadow: 0 4px 12px rgba(24,59,222,0.13);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-wrapper">
+        <div class="android-status-bar">
+            <span>오전 11:32</span>
+            <span>
+                ▇ <span style="font-size:10px;">LTE</span> <span>&#128246;</span> <span>&#128267;</span>
+            </span>
+        </div>
+        <div class="android-header">
+            <span style="flex: 1 1 auto;text-align:center;"> </span>
+            <button class="settings-icon-btn" aria-label="설정">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.14,12.94a7.15,7.15,0,0,0,.05-1,7.15,7.15,0,0,0-.05-1l2.11-1.65a.5.5,0,0,0,.12-.67l-2-3.46a.5.5,0,0,0-.61-.22l-2.49,1A7.23,7.23,0,0,0,15.1,5.5l-.38-2.65A.5.5,0,0,0,14.24,2H9.76a.5.5,0,0,0-.5.42L8.88,5.07A7.23,7.23,0,0,0,6.86,6.06l-2.49-1a.5.5,0,0,0-.61.22l-2,3.46a.5.5,0,0,0,.12.67l2.11,1.65a7.15,7.15,0,0,0-.05,1,7.15,7.15,0,0,0,.05,1L2.13,14.59a.5.5,0,0,0-.12.67l2,3.46a.5.5,0,0,0,.61.22l2.49-1a7.23,7.23,0,0,0,2,.56l.38,2.65a.5.5,0,0,0,.5.42h4.48a.5.5,0,0,0,.5-.42l.38-2.65a7.23,7.23,0,0,0,2-.56l2.49,1a.5.5,0,0,0,.61-.22l2-3.46a.5.5,0,0,0-.12-.67Zm-7.14,2.1A3,3,0,1,1,15,12,3,3,0,0,1,12,15Z"/></svg>
+            </button>
+        </div>
+        <div class="main-scroll">
+            <div class="main-container">
+                <button class="group-search-btn" aria-label="그룹 검색">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="57" height="57" viewBox="0 0 57 57" fill="none">
+                        <circle cx="28.5" cy="28.5" r="25.5" fill="#f4f6fa" stroke="#c8d1e2" stroke-width="3"/>
+                        <circle cx="26.25" cy="26.25" r="9.75" stroke="#1877f2" stroke-width="3"/>
+                        <line x1="32.85" y1="33" x2="39" y2="39.3" stroke="#1877f2" stroke-width="3.3" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <div class="group-card">
+                    <div class="group-card-header">
+                        <span class="group-name">플롯 마스터즈</span>
+                    </div>
+                    <div class="group-desc">함께 플롯 연주 실력을 키우는 친목형 음악 동아리입니다.</div>
+                    <div class="group-tags">
+                        <span class="group-tag">#주3회</span>
+                        <span class="group-tag">#취미</span>
+                    </div>
+                    <div class="group-status">
+                        오늘 연습 인원: <span class="group-today">4</span>/<span class="group-total">5</span>
+                    </div>
+                </div>
+                <div class="group-card">
+                    <div class="group-card-header">
+                        <span class="group-name">현악 앙상블</span>
+                    </div>
+                    <div class="group-desc">바이올린, 첼로 등 클래식 현악 연주를 사랑하는 분들을 위한 모임!</div>
+                    <div class="group-tags">
+                        <span class="group-tag">#격주</span>
+                        <span class="group-tag">#클래식</span>
+                    </div>
+                    <div class="group-status">
+                        오늘 연습 인원: <span class="group-today">2</span>/<span class="group-total">7</span>
+                    </div>
+                </div>
+                <div class="group-card">
+                    <div class="group-card-header">
+                        <span class="group-name">재즈 sax모임</span>
+                    </div>
+                    <div class="group-desc">따뜻한 사운드, 자유로운 재즈 색소폰 커뮤니티!</div>
+                    <div class="group-tags">
+                        <span class="group-tag">#월1회</span>
+                        <span class="group-tag">#재즈</span>
+                    </div>
+                    <div class="group-status">
+                        오늘 연습 인원: <span class="group-today">1</span>/<span class="group-total">3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <span class="nav-icon">
+                    <!-- 그룹(사람) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="currentColor">
+                        <circle cx="12" cy="14" r="5"/>
+                        <circle cx="24" cy="14" r="5"/>
+                        <ellipse cx="18" cy="25" rx="12" ry="7"/>
+                    </svg>
+                </span>
+                그룹
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">
+                    <!-- 집(홈) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="currentColor" stroke="currentColor" stroke-width="2.5">
+                        <path d="M4 18L18 6L32 18"/>
+                        <rect x="10" y="18" width="16" height="12"/>
+                    </svg>
+                </span>
+                홈
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">
+                    <!-- 말풍선(커뮤니티) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="currentColor">
+                        <ellipse cx="18" cy="18" rx="14" ry="10"/>
+                        <ellipse cx="26" cy="28" rx="5" ry="3"/>
+                        <circle cx="14" cy="18" r="2" fill="#fff"/>
+                        <circle cx="18" cy="18" r="2" fill="#fff"/>
+                        <circle cx="22" cy="18" r="2" fill="#fff"/>
+                    </svg>
+                </span>
+                커뮤니티
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>PerformProject - Group Main</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Noto Sans KR', 'Roboto', Arial, sans-serif;
+            background: #eee;
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        /* 20:9 비율을 위한 wrapper */
+        .mobile-wrapper {
+            width: 400px;
+            height: 900px;
+            max-width: 100vw;
+            max-height: 95vh;
+            background: #f5f5f5;
+            box-shadow: 0 8px 32px rgba(80,80,90,0.11), 0 1.5px 6px rgba(0,0,0,0.03);
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .android-status-bar {
+            height: 24px;
+            background: #222;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 12px;
+            justify-content: space-between;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+        }
+        .android-header {
+            background: #1877f2;
+            color: #fff;
+            padding: 24px 0 20px 0; /* 상하 패딩 두 배로 증가 */
+            display: flex; /* flex 레이아웃 적용 */
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            font-size: 19px;
+            font-weight: bold;
+            box-shadow: 0 1.5px 5px rgba(0,0,0,0.06);
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .settings-icon-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .settings-icon-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: #fff;
+        }
+        .main-scroll {
+            flex: 1 1 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            width: 100%;
+            background: #fff;
+            position: relative;
+        }
+        .main-container {
+            width: 100%;
+            height: auto;
+            min-height: 0;
+            box-sizing: border-box;
+            padding-top: 20px;
+            padding-bottom: 80px;
+            background: #fff;
+        }
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 -1px 9px rgba(80,80,90,0.09);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-radius: 16px 16px 0 0;
+            z-index: 20;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #a0a0a0;
+            font-size: 13px;
+        }
+        .nav-item.active {
+            color: #1877f2;
+            font-weight: bold;
+        }
+        .nav-icon {
+            width: 36px;
+            height: 36px;
+            margin-bottom: 2px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-wrapper">
+        <div class="android-status-bar">
+            <span>오전 11:32</span>
+            <span>
+                ▇ <span style="font-size:10px;">LTE</span> <span>&#128246;</span> <span>&#128267;</span>
+            </span>
+        </div>
+        <div class="android-header">
+            <span style="flex: 1 1 auto;text-align:center;"> </span>
+            <button class="settings-icon-btn" aria-label="설정">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.14,12.94a7.15,7.15,0,0,0,.05-1,7.15,7.15,0,0,0-.05-1l2.11-1.65a.5.5,0,0,0,.12-.67l-2-3.46a.5.5,0,0,0-.61-.22l-2.49,1A7.23,7.23,0,0,0,15.1,5.5l-.38-2.65A.5.5,0,0,0,14.24,2H9.76a.5.5,0,0,0-.5.42L8.88,5.07A7.23,7.23,0,0,0,6.86,6.06l-2.49-1a.5.5,0,0,0-.61.22l-2,3.46a.5.5,0,0,0,.12.67l2.11,1.65a7.15,7.15,0,0,0-.05,1,7.15,7.15,0,0,0,.05,1L2.13,14.59a.5.5,0,0,0-.12.67l2,3.46a.5.5,0,0,0,.61.22l2.49-1a7.23,7.23,0,0,0,2,.56l.38,2.65a.5.5,0,0,0,.5.42h4.48a.5.5,0,0,0,.5-.42l.38-2.65a7.23,7.23,0,0,0,2-.56l2.49,1a.5.5,0,0,0,.61-.22l2-3.46a.5.5,0,0,0-.12-.67Zm-7.14,2.1A3,3,0,1,1,15,12,3,3,0,0,1,12,15Z"/></svg>
+            </button>
+        </div>
+        <div class="main-scroll">
+            <div class="main-container">
+                <!-- 새 화면 작성을 위해 main-container 내부 요소는 비워둡니다. -->
+            </div>
+        </div>
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <span class="nav-icon">
+                    <!-- 그룹(사람) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="currentColor">
+                        <circle cx="12" cy="14" r="5"/>
+                        <circle cx="24" cy="14" r="5"/>
+                        <ellipse cx="18" cy="25" rx="12" ry="7"/>
+                    </svg>
+                </span>
+                그룹
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">
+                    <!-- 집(홈) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="currentColor" stroke="currentColor" stroke-width="2.5">
+                        <path d="M4 18L18 6L32 18"/>
+                        <rect x="10" y="18" width="16" height="12"/>
+                    </svg>
+                </span>
+                홈
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">
+                    <!-- 말풍선(커뮤니티) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="currentColor">
+                        <ellipse cx="18" cy="18" rx="14" ry="10"/>
+                        <ellipse cx="26" cy="28" rx="5" ry="3"/>
+                        <circle cx="14" cy="18" r="2" fill="#fff"/>
+                        <circle cx="18" cy="18" r="2" fill="#fff"/>
+                        <circle cx="22" cy="18" r="2" fill="#fff"/>
+                    </svg>
+                </span>
+                커뮤니티
+            </div>
+        </div>
+    </div>
+</body>
+</html>

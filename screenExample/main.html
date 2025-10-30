@@ -50,7 +50,11 @@
         .android-header {
             background: #1877f2;
             color: #fff;
-            padding: 12px 0 10px 0;
+            padding: 24px 0 20px 0; /* 상하 패딩 두 배로 증가 */
+            display: flex; /* flex 레이아웃 적용 */
+            justify-content: center;
+            align-items: center;
+            position: relative;
             text-align: center;
             font-size: 19px;
             font-weight: bold;
@@ -59,6 +63,24 @@
             position: sticky;
             top: 0;
             z-index: 10;
+        }
+        .settings-icon-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .settings-icon-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: #fff;
         }
         .main-scroll {
             flex: 1 1 0;
@@ -124,13 +146,21 @@
             color: #a0a0a0;
             font-size: 13px;
         }
+        .nav-item .nav-icon svg {
+            fill: #a0a0a0;
+            stroke: #a0a0a0;
+        }
         .nav-item.active {
             color: #1877f2;
             font-weight: bold;
         }
+        .nav-item.active .nav-icon svg {
+            fill: #1877f2;
+            stroke: #1877f2;
+        }
         .nav-icon {
-            width: 26px;
-            height: 26px;
+            width: 36px;
+            height: 36px;
             margin-bottom: 2px;
             display: block;
         }
@@ -259,8 +289,21 @@
             background: #f4cd6a !important;
             color: #333;
             font-weight: bold;
-            border-radius: 999px;
+            border-radius: 12px !important;
             box-shadow: 0 0 1.5px #eaca49;
+            width: 100%;
+            margin: 0;
+            display: block;
+        }
+        .calendar-marked-blue {
+            background: #1877f2 !important;
+            color: #fff !important;
+            font-weight: bold;
+            border-radius: 12px !important;
+            box-shadow: 0 0 1.5px #145ac8;
+            width: 100%;
+            margin: 0;
+            display: block;
         }
     </style>
 </head>
@@ -273,7 +316,10 @@
             </span>
         </div>
         <div class="android-header">
-            PerformProject
+            <span style="flex: 1 1 auto;text-align:center;"> </span>
+            <button class="settings-icon-btn" aria-label="설정">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.14,12.94a7.15,7.15,0,0,0,.05-1,7.15,7.15,0,0,0-.05-1l2.11-1.65a.5.5,0,0,0,.12-.67l-2-3.46a.5.5,0,0,0-.61-.22l-2.49,1A7.23,7.23,0,0,0,15.1,5.5l-.38-2.65A.5.5,0,0,0,14.24,2H9.76a.5.5,0,0,0-.5.42L8.88,5.07A7.23,7.23,0,0,0,6.86,6.06l-2.49-1a.5.5,0,0,0-.61.22l-2,3.46a.5.5,0,0,0,.12.67l2.11,1.65a7.15,7.15,0,0,0-.05,1,7.15,7.15,0,0,0,.05,1L2.13,14.59a.5.5,0,0,0-.12.67l2,3.46a.5.5,0,0,0,.61.22l2.49-1a7.23,7.23,0,0,0,2,.56l.38,2.65a.5.5,0,0,0,.5.42h4.48a.5.5,0,0,0,.5-.42l.38-2.65a7.23,7.23,0,0,0,2-.56l2.49,1a.5.5,0,0,0,.61-.22l2-3.46a.5.5,0,0,0-.12-.67Zm-7.14,2.1A3,3,0,1,1,15,12,3,3,0,0,1,12,15Z"/></svg>
+            </button>
         </div>
         <div class="main-scroll">
             <div class="main-container">
@@ -288,7 +334,7 @@
                     </span>
                     <div class="avatar-info">
                         <div class="avatar-nickname">닉네임</div>
-                        <div class="avatar-tags">#취미 <span class="avatar-divider">|</span> #플롯</div>
+                        <div class="avatar-tags">#취미 #플롯</div>
                     </div>
                 </div>
                 <div class="gauge-time-block">
@@ -309,17 +355,39 @@
             </div>
         </div>
         <div class="bottom-nav">
+            <div class="nav-item">
+                <span class="nav-icon">
+                    <!-- 그룹(사람) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="currentColor">
+                        <circle cx="12" cy="14" r="5"/>
+                        <circle cx="24" cy="14" r="5"/>
+                        <ellipse cx="18" cy="25" rx="12" ry="7"/>
+                    </svg>
+                </span>
+                그룹
+            </div>
             <div class="nav-item active">
-                <span class="nav-icon">🏠</span>
+                <span class="nav-icon">
+                    <!-- 집(홈) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="currentColor" stroke="currentColor" stroke-width="2.5">
+                        <path d="M4 18L18 6L32 18"/>
+                        <rect x="10" y="18" width="16" height="12"/>
+                    </svg>
+                </span>
                 홈
             </div>
             <div class="nav-item">
-                <span class="nav-icon">📄</span>
-                기록
-            </div>
-            <div class="nav-item">
-                <span class="nav-icon">⚙️</span>
-                설정
+                <span class="nav-icon">
+                    <!-- 말풍선(커뮤니티) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="currentColor">
+                        <ellipse cx="18" cy="18" rx="14" ry="10"/>
+                        <ellipse cx="26" cy="28" rx="5" ry="3"/>
+                        <circle cx="14" cy="18" r="2" fill="#fff"/>
+                        <circle cx="18" cy="18" r="2" fill="#fff"/>
+                        <circle cx="22" cy="18" r="2" fill="#fff"/>
+                    </svg>
+                </span>
+                커뮤니티
             </div>
         </div>
     </div>
@@ -330,18 +398,23 @@
             const month = today.getMonth();
             const date = today.getDate();
 
-            // document.getElementById('calendar-year').textContent = year; // 삭제됨
             document.getElementById('calendar-month').textContent = month + 1;
 
             const first = new Date(year, month, 1);
             const last = new Date(year, month + 1, 0);
             const startDay = first.getDay();
             const lastDate = last.getDate();
+
             let html = '';
+            // 오늘 이전 날짜 중 일부를 랜덤으로 선정
+            const blueMarkedDays = Array.from({length: date-1}, (_,i)=>i+1).filter(_=>Math.random()<0.4);
+
             for(let i=0; i<startDay; i++) html += '<span></span>';
             for(let i=1; i<=lastDate; i++) {
                 if(i===date){
                     html += `<span class='calendar-today'>${i}</span>`;
+                } else if (i < date && blueMarkedDays.includes(i)) {
+                    html += `<span class='calendar-marked-blue'>${i}</span>`;
                 } else {
                     html += `<span>${i}</span>`;
                 }
