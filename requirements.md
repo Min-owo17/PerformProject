@@ -403,3 +403,4 @@ dependencies:
 - **PWA 지원**: 웹 앱 매니페스트 설정
 - **AWS 최적화**: EC2 t3.micro 최적화 + Lambda 콜드 스타트 최적화
 
+
