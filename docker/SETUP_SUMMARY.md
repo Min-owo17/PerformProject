@@ -111,6 +111,7 @@ curl http://localhost:8000/health
 
 ### 상세 설정 가이드
 - **[AWS_EC2_SETUP_GUIDE.md](./AWS_EC2_SETUP_GUIDE.md)** - 상세한 설정 및 문제 해결 가이드
+- **[FILEZILLA_UPLOAD_GUIDE.md](./FILEZILLA_UPLOAD_GUIDE.md)** - FileZilla를 사용한 파일 업로드 가이드
 
 ### 환경변수 설정 가이드
 - **[ENV.md](./ENV.md)** - 환경변수 설정 방법

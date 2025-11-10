@@ -256,11 +256,222 @@ scp -i "C:\path\to\perform-project-key.pem" -r docker\ ec2-user@your-ec2-ip:/opt
 scp -i perform-project-key.pem -r docker/ ec2-user@your-ec2-ip:/opt/performproject/
 ```
 
-### 방법 3: SFTP 클라이언트 사용
+### 방법 3: FileZilla를 사용한 업로드 (GUI 방식)
 
-- WinSCP (Windows)
-- FileZilla (모든 플랫폼)
-- VS Code의 SFTP 확장
+FileZilla는 GUI를 제공하는 SFTP 클라이언트로, 파일 업로드가 간편합니다.
+
+**상세 가이드**: [FileZilla 업로드 가이드](./FILEZILLA_UPLOAD_GUIDE.md)를 참조하세요.
+
+#### 1. FileZilla 설치
+
+1. **FileZilla 다운로드**
+   - 공식 웹사이트: https://filezilla-project.org/
+   - "Download FileZilla Client" 선택
+   - 운영체제에 맞는 버전 다운로드 및 설치
+
+2. **FileZilla 실행**
+   - 설치 후 FileZilla 클라이언트 실행
+
+#### 2. EC2 서버 연결 설정
+
+1. **사이트 관리자 열기**
+   - FileZilla 메뉴: `파일` → `사이트 관리자` (또는 `Ctrl+S`)
+   - 또는 상단 아이콘 바의 "사이트 관리자" 아이콘 클릭
+
+2. **새 사이트 추가**
+   - "새 사이트" 버튼 클릭
+   - 사이트 이름 입력 (예: `PerformProject EC2`)
+
+3. **연결 정보 입력**
+   - **프로토콜**: `SFTP - SSH File Transfer Protocol` 선택
+   - **호스트**: EC2 인스턴스의 퍼블릭 IP 주소 또는 퍼블릭 DNS 입력
+     - 예: `54.123.45.67` 또는 `ec2-54-123-45-67.ap-northeast-2.compute.amazonaws.com`
+   - **포트**: `22` (기본 SSH 포트)
+   - **로그온 유형**: `키 파일` 선택
+   - **사용자**: 
+     - Amazon Linux 2: `ec2-user`
+     - Ubuntu: `ubuntu`
+   - **키 파일**: `.pem` 키 파일 경로 선택
+     - "찾아보기" 버튼 클릭하여 키 파일 선택
+     - Windows: `C:\path\to\perform-project-key.pem`
+     - Mac/Linux: `/path/to/perform-project-key.pem`
+
+4. **연결 설정 저장**
+   - "연결" 버튼 클릭하여 연결 테스트
+   - 연결이 성공하면 "확인" 버튼으로 설정 저장
+
+#### 3. 서버에 연결
+
+1. **연결 방법 1: 사이트 관리자에서 연결**
+   - `파일` → `사이트 관리자` (또는 `Ctrl+S`)
+   - 저장한 사이트 선택
+   - "연결" 버튼 클릭
+
+2. **연결 방법 2: 빠른 연결**
+   - 상단의 빠른 연결 바 사용
+   - 호스트, 사용자명, 비밀번호(키 파일 경로), 포트 입력
+   - "빠른 연결" 버튼 클릭
+
+3. **연결 확인**
+   - 연결 성공 시 하단 메시지 로그에 "서버에 연결했습니다" 메시지 표시
+   - 우측 원격 사이트 영역에 서버의 디렉토리 구조 표시
+
+#### 4. 프로젝트 파일 업로드
+
+1. **로컬 디렉토리 이동**
+   - 좌측 "로컬 사이트" 영역에서 프로젝트 디렉토리로 이동
+   - 예: `C:\Users\YourName\Desktop\개발\PerformProject\PerformProject`
+
+2. **서버 디렉토리 생성 및 이동**
+   - 우측 "원격 사이트" 영역에서 서버의 디렉토리로 이동
+   - `/opt/performproject` 디렉토리 생성 (없는 경우)
+     - 우클릭 → "디렉토리 만들기" → `/opt/performproject` 입력
+   - `/opt/performproject` 디렉토리로 이동
+
+   **주의**: 루트 디렉토리(`/opt`)에 파일을 업로드하려면 `sudo` 권한이 필요할 수 있습니다.
+   - 일반 사용자 디렉토리(예: `/home/ec2-user`)에 먼저 업로드한 후 SSH로 이동하는 방법도 가능합니다.
+
+3. **파일 업로드**
+   - 업로드할 파일/폴더 선택
+     - 단일 파일: 파일 클릭
+     - 여러 파일: `Ctrl` 키를 누른 채 파일 클릭
+     - 전체 폴더: 폴더 클릭
+   - 선택한 파일/폴더를 우측 원격 사이트로 드래그 앤 드롭
+   - 또는 선택 후 우클릭 → "업로드" 선택
+   - 또는 선택 후 상단 툴바의 "업로드" 버튼 클릭
+
+4. **업로드 진행 상황 확인**
+   - 하단 "전송된 파일" 탭에서 업로드 진행 상황 확인
+   - 업로드 완료 후 우측 원격 사이트에서 파일 확인
+
+#### 5. 파일 권한 설정 (선택사항)
+
+일부 파일(스크립트 등)은 실행 권한이 필요할 수 있습니다.
+
+1. **SSH로 서버 접속**
+   ```bash
+   ssh -i "your-key.pem" ec2-user@your-ec2-ip
+   ```
+
+2. **파일 권한 설정**
+   ```bash
+   cd /opt/performproject/docker
+   chmod +x setup-env.sh
+   chmod +x deploy.sh
+   chmod +x backup.sh
+   chmod +x restore.sh
+   ```
+
+#### 6. FileZilla 연결 문제 해결
+
+##### 문제 1: "연결할 수 없습니다" 오류
+
+**원인**: 
+- 잘못된 호스트 주소
+- 보안 그룹에서 SSH(22) 포트가 차단됨
+- 키 파일 경로 오류
+
+**해결 방법**:
+1. EC2 인스턴스의 퍼블릭 IP 주소 확인
+2. 보안 그룹에서 SSH(22) 포트가 열려있는지 확인
+3. 키 파일 경로가 정확한지 확인
+4. 키 파일 권한 확인 (Windows에서는 보통 문제없음)
+
+##### 문제 2: "인증 실패" 오류
+
+**원인**:
+- 잘못된 사용자명
+- 키 파일 형식 오류
+- 키 파일이 올바르지 않음
+
+**해결 방법**:
+1. 사용자명 확인
+   - Amazon Linux 2: `ec2-user`
+   - Ubuntu: `ubuntu`
+2. 키 파일이 올바른지 확인
+3. 키 파일을 다시 다운로드
+
+##### 문제 3: "/opt 디렉토리에 접근할 수 없습니다" 오류
+
+**원인**:
+- `/opt` 디렉토리는 루트 권한이 필요
+
+**해결 방법**:
+1. **방법 1: 홈 디렉토리에 업로드 후 이동**
+   ```bash
+   # FileZilla로 /home/ec2-user/performproject에 업로드
+   # SSH로 접속하여 이동
+   sudo mv /home/ec2-user/performproject /opt/performproject
+   sudo chown -R ec2-user:ec2-user /opt/performproject
+   ```
+
+2. **방법 2: SSH로 디렉토리 생성 후 업로드**
+   ```bash
+   # SSH로 접속
+   ssh -i "your-key.pem" ec2-user@your-ec2-ip
+   
+   # 디렉토리 생성
+   sudo mkdir -p /opt/performproject
+   sudo chown ec2-user:ec2-user /opt/performproject
+   ```
+   - 그 후 FileZilla로 `/opt/performproject`에 업로드
+
+##### 문제 4: 대용량 파일 업로드 실패
+
+**원인**:
+- 네트워크 연결 불안정
+- 타임아웃 설정
+
+**해결 방법**:
+1. FileZilla 설정에서 타임아웃 시간 증가
+   - `편집` → `설정` → `연결` → "타임아웃(초)" 증가
+2. 재시도 횟수 증가
+   - `편집` → `설정` → `전송` → "재시도 횟수" 증가
+3. 대용량 파일은 압축하여 업로드 후 서버에서 압축 해제
+
+#### 7. FileZilla 설정 최적화
+
+1. **동시 전송 수 증가**
+   - `편집` → `설정` → `전송` → "동시 전송 수" 증가 (기본값: 2)
+
+2. **전송 속도 제한 해제**
+   - `편집` → `설정` → `전송` → "속도 제한" 해제
+
+3. **파일 비교 설정**
+   - `편집` → `설정` → `전송` → "파일 존재 시 동작" 설정
+   - "자동" 또는 "항상 이 동작 사용" 선택
+
+#### 8. FileZilla 사용 팁
+
+1. **빠른 연결 저장**
+   - 연결 성공 후 `파일` → `사이트 관리자`에서 저장
+   - 다음부터는 사이트 관리자에서 바로 연결 가능
+
+2. **동기화된 탐색**
+   - `보기` → `동기화된 탐색` 활성화
+   - 로컬과 원격 디렉토리를 동기화하여 탐색
+
+3. **파일 비교**
+   - `서버` → `파일 비교`로 로컬과 원격 파일 비교
+   - 변경된 파일만 업로드 가능
+
+4. **원격 파일 편집**
+   - 원격 파일을 더블클릭하여 로컬에서 편집
+   - 저장 시 자동으로 서버에 업로드
+
+#### 9. 대안: WinSCP (Windows 전용)
+
+Windows 사용자는 WinSCP도 사용할 수 있습니다:
+- 공식 웹사이트: https://winscp.net/
+- FileZilla와 유사한 사용법
+- 더 간단한 인터페이스 제공
+
+#### 10. 대안: VS Code SFTP 확장
+
+VS Code를 사용하는 경우 SFTP 확장을 사용할 수 있습니다:
+- 확장 프로그램: "SFTP" (Natizyskunk)
+- 설정 파일을 통해 자동 업로드 가능
+- 개발 중 실시간 동기화 가능
 
 ---
 

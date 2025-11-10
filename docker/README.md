@@ -222,7 +222,12 @@ chmod +x deploy.sh
 
 ### AWS EC2에 배포
 
-1. **EC2 인스턴스 준비**
+더 자세한 내용은 다음 가이드를 참조하세요:
+- **[AWS EC2 설정 가이드](./AWS_EC2_SETUP_GUIDE.md)** - 상세한 EC2 설정 가이드
+- **[빠른 시작 가이드](./QUICK_START.md)** - 단계별 빠른 설정 가이드
+- **[FileZilla 업로드 가이드](./FILEZILLA_UPLOAD_GUIDE.md)** - FileZilla를 사용한 파일 업로드 가이드
+
+#### 1. EC2 인스턴스 준비
    ```bash
    # Docker 설치
    sudo yum update -y
@@ -236,25 +241,26 @@ chmod +x deploy.sh
    sudo chmod +x /usr/local/bin/docker-compose
    ```
 
-2. **프로젝트 파일 업로드**
-   ```bash
-   # SCP 또는 Git을 사용하여 파일 업로드
-   scp -r docker/ ec2-user@your-ec2-ip:/opt/performproject/
-   ```
+#### 2. 프로젝트 파일 업로드
+   - **Git 사용 (권장)**: `git clone <repository-url> /opt/performproject`
+   - **SCP 사용**: `scp -r docker/ ec2-user@your-ec2-ip:/opt/performproject/`
+   - **FileZilla 사용**: [FileZilla 업로드 가이드](./FILEZILLA_UPLOAD_GUIDE.md) 참조
 
-3. **환경변수 설정**
+#### 3. 환경변수 설정
    ```bash
    cd /opt/performproject/docker
+   ./setup-env.sh prod  # 자동 생성 스크립트 사용
+   # 또는
    cp .env.example .env.prod
    nano .env.prod  # 비밀번호 수정
    ```
 
-4. **서비스 시작**
+#### 4. 서비스 시작
    ```bash
    docker-compose -f docker-compose.prod.yml up -d
    ```
 
-5. **상태 확인**
+#### 5. 상태 확인
    ```bash
    docker-compose -f docker-compose.prod.yml ps
    docker-compose -f docker-compose.prod.yml logs -f

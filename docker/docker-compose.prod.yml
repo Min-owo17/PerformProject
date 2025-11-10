@@ -30,6 +30,7 @@ services:
   redis:
     image: redis:7-alpine
     container_name: perform_redis_prod
+    env_file: .env.prod
     command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
     volumes:
       - /var/lib/redis/data:/data
@@ -62,7 +63,7 @@ services:
       - perform_network
 
   minio-init:
-    image: quay.io/minio/mc:RELEASE.2024-05-10T00-17-41Z
+    image: quay.io/minio/mc:latest
     container_name: perform_minio_init_prod
     depends_on:
       minio:

@@ -115,6 +115,9 @@ scp -i "C:\path\to\your-key.pem" -r docker\ ec2-user@your-ec2-ip:/opt/performpro
 scp -i your-key.pem -r docker/ ec2-user@your-ec2-ip:/opt/performproject/
 ```
 
+### FileZilla를 사용한 방법 (GUI)
+FileZilla를 사용하여 파일을 업로드하는 방법은 **[FileZilla 업로드 가이드](./FILEZILLA_UPLOAD_GUIDE.md)**를 참조하세요.
+
 ---
 
 ## 5. 환경변수 파일 생성 및 설정
@@ -246,7 +249,10 @@ sudo netstat -tulpn | grep :5432
 
 ## 상세 가이드
 
-더 자세한 내용은 [AWS_EC2_SETUP_GUIDE.md](./AWS_EC2_SETUP_GUIDE.md)를 참조하세요.
+더 자세한 내용은 다음 가이드를 참조하세요:
+- **[AWS EC2 설정 가이드](./AWS_EC2_SETUP_GUIDE.md)** - 상세한 EC2 설정 가이드
+- **[FileZilla 업로드 가이드](./FILEZILLA_UPLOAD_GUIDE.md)** - FileZilla를 사용한 파일 업로드 가이드
+- **[환경변수 설정 가이드](./ENV.md)** - 환경변수 설정 방법
 
 ---
 
