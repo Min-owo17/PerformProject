@@ -547,7 +547,7 @@ docker exec -i perform_postgres_prod psql -U perform_user -d perform_db < postgr
 
 ```bash
 # 프로젝트 디렉토리로 이동
-cd /opt/performproject/docker
+cd /opt/performproject/PerformProject/docker
 
 # Docker Compose로 서비스 시작
 docker-compose -f docker-compose.prod.yml up -d
