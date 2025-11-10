@@ -4,3 +4,9 @@
 - 대상 컴포넌트: PostgreSQL, pgAdmin, Redis, MinIO(S3 대체), (옵션) FastAPI 백엔드 컨테이너.
 
 
+
+
+
+
+
+

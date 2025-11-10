@@ -64,21 +64,21 @@
 - **큐잉**: AWS SQS (배치 처리)
 
 ### 3.2 프론트엔드
-- **크로스 플랫폼**: Flutter를 이용한 웹/모바일 동시 개발
-- **기술 스택**: Flutter (Dart)
-- **UI/UX**: 모바일 우선 반응형 디자인
-- **상태 관리**: Provider/Riverpod
-- **로컬 저장소**: SQLite/Hive
+- **기술 스택**: React, TypeScript
+- **스타일링**: Tailwind CSS
+- **UI/UX**: 반응형 웹 디자인 (모바일 우선)
+- **상태 관리**: Redux Toolkit / Zustand
+- **로컬 저장소**: localStorage / IndexedDB
 
 ### 3.3 인프라
-- **배포 전략**: 모바일 우선 (Google Play Store / App Store) → 웹 확장 (AWS EC2 t3.micro)
-- **1단계 (모바일)**: Flutter 앱 → Google Play Store / App Store 배포
-- **2단계 (웹)**: Flutter Web → AWS EC2 t3.micro 배포
+- **배포 전략**: 웹 우선 배포 (AWS EC2 t3.micro)
+- **웹 배포**: React 앱 → AWS EC2 t3.micro + CloudFront CDN
+- **빌드 도구**: Vite / Create React App
 - **파일 저장**: AWS S3
-- **CDN**: CloudFront (AWS) - 웹 확장 시 적용
+- **CDN**: CloudFront (AWS)
 - **모니터링**: CloudWatch
 - **로깅**: CloudWatch Logs
-- **알림**: AWS SNS (푸시 알림 우선)
+- **알림**: AWS SNS (이메일/웹 푸시 알림)
 
 ## 4. 데이터베이스 설계
 
@@ -231,10 +231,11 @@ CREATE TABLE recording_files (
 );
 ```
 
-### 4.2 Flutter 로컬 데이터베이스 (SQLite/Hive)
-- **오프라인 캐싱**: 연습 기록 로컬 저장
-- **동기화**: PostgreSQL과 실시간 동기화
-- **성능 최적화**: 로컬 쿼리로 빠른 데이터 접근
+### 4.2 React 클라이언트 저장소
+- **오프라인 캐싱**: localStorage 및 IndexedDB를 통한 연습 기록 로컬 저장
+- **동기화**: PostgreSQL과 실시간 동기화 (WebSocket)
+- **성능 최적화**: 로컬 캐싱으로 빠른 데이터 접근 및 오프라인 지원
+- **상태 관리**: Redux Toolkit / Zustand를 통한 클라이언트 상태 관리
 
 ### 4.3 AWS 데이터 저장소
 - **S3**: 대용량 오디오 파일 임시 저장
@@ -242,41 +243,54 @@ CREATE TABLE recording_files (
 - **Redis**: 세션 데이터 캐싱 (EC2 내 설치)
 - **S3**: 파일 저장 및 백업
 
-## 5. Flutter 구현 방안
+## 5. React 구현 방안
 
-### 5.1 Flutter 패키지 의존성
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  # 상태 관리
-  provider: ^6.0.0
-  # 네트워킹
-  dio: ^5.0.0
-  # 로컬 데이터베이스
-  sqflite: ^2.0.0
-  hive: ^2.2.3
-  # 인증
-  google_sign_in: ^6.1.0
-  kakao_flutter_sdk: ^1.0.0
-  # 파일 관리
-  file_picker: ^5.0.0
-  # 오디오 녹음
-  record: ^4.0.0
-  # 캘린더
-  table_calendar: ^3.0.0
-  # 차트
-  fl_chart: ^0.65.0
-  # 공유
-  share_plus: ^7.0.0
-  # 이미지 처리
-  image_picker: ^1.0.0
-  # 로컬 저장소
-  shared_preferences: ^2.0.0
-  # JWT 토큰
-  jwt_decoder: ^2.0.1
-  # 소셜 로그인
-  sign_in_with_apple: ^4.3.0
+### 5.1 React 패키지 의존성
+```json
+{
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "@reduxjs/toolkit": "^1.9.0",
+    "react-redux": "^8.1.0",
+    "zustand": "^4.4.0",
+    "axios": "^1.5.0",
+    "react-router-dom": "^6.16.0",
+    "@tanstack/react-query": "^5.0.0",
+    "localforage": "^1.10.0",
+    "dexie": "^3.2.0",
+    "react-hook-form": "^7.47.0",
+    "zod": "^3.22.0",
+    "@hookform/resolvers": "^3.3.0",
+    "react-calendar": "^4.6.0",
+    "recharts": "^2.8.0",
+    "react-webcam": "^7.1.0",
+    "wavesurfer.js": "^7.0.0",
+    "socket.io-client": "^4.6.0",
+    "react-oauth/google": "^0.11.0",
+    "jwt-decode": "^4.0.0",
+    "date-fns": "^2.30.0",
+    "react-hot-toast": "^2.4.0",
+    "framer-motion": "^10.16.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.1.0",
+    "eslint": "^8.50.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "prettier": "^3.0.0",
+    "vitest": "^1.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.1.0"
+  }
+}
 ```
 
 ### 5.2 PostgreSQL + AWS 연동
@@ -284,21 +298,25 @@ dependencies:
 - **데이터베이스**: PostgreSQL 실시간 동기화
 - **파일 저장**: AWS S3
 - **AI 처리**: AWS Lambda 함수 호출
-- **실시간 동기화**: WebSocket + PostgreSQL LISTEN/NOTIFY
+- **실시간 동기화**: WebSocket (Socket.io) + PostgreSQL LISTEN/NOTIFY
 
-### 5.3 Flutter 아키텍처
-- **상태 관리**: Provider/Riverpod 패턴
-- **의존성 주입**: GetIt 패키지
-- **라우팅**: GoRouter 패키지
-- **로컬 저장소**: SQLite + Hive 조합
+### 5.3 React 아키텍처
+- **상태 관리**: Redux Toolkit / Zustand
+- **서버 상태 관리**: React Query (TanStack Query)
+- **라우팅**: React Router v6
+- **폼 관리**: React Hook Form + Zod
+- **로컬 저장소**: localStorage (간단한 데이터) + IndexedDB (대용량 데이터, Dexie.js)
+- **빌드 도구**: Vite
+- **코드 품질**: ESLint + Prettier + TypeScript
 
 ### 5.4 API 연동 방식
-- **REST API**: FastAPI 백엔드와 Dio 패키지로 통신
-- **AWS API**: Dio 패키지로 AWS Lambda 호출
-- **실시간 데이터**: WebSocket + PostgreSQL LISTEN/NOTIFY
-- **파일 업로드**: AWS S3 직접 업로드
+- **REST API**: FastAPI 백엔드와 Axios로 통신
+- **AWS API**: Axios로 AWS Lambda 호출
+- **실시간 데이터**: WebSocket (Socket.io) + PostgreSQL LISTEN/NOTIFY
+- **파일 업로드**: AWS S3 직접 업로드 (Presigned URL)
 - **AI 분석**: AWS Lambda 함수 비동기 호출
-- **오프라인 지원**: 로컬 캐싱 + PostgreSQL 동기화
+- **오프라인 지원**: Service Worker + IndexedDB 캐싱 + PostgreSQL 동기화
+- **에러 처리**: React Query의 에러 핸들링 및 재시도 로직
 
 ## 6. 보안 및 개인정보 보호
 
@@ -324,37 +342,44 @@ dependencies:
 - 초기 목표: 1,000명 동시 접속
 - 확장 가능한 아키텍처 설계
 
-## 8. Flutter 개발 단계
+## 8. React 개발 단계
 
 ### 8.1 Phase 1 (MVP) - 2-3주
-- Flutter 프로젝트 초기 설정
+- React + TypeScript 프로젝트 초기 설정 (Vite)
+- Tailwind CSS 설정 및 기본 스타일 시스템 구축
 - PostgreSQL 데이터베이스 설정
 - AWS EC2 t3.micro 인스턴스 설정
 - FastAPI 백엔드 기본 구조 구현
-- 기본 UI/UX 구현 (Material Design 3)
-- 사용자 인증 (JWT + OAuth)
+- 기본 UI/UX 구현 (Tailwind CSS, 반응형 디자인)
+- 사용자 인증 (JWT + OAuth: 구글, 카카오, 네이버)
 - 연습 기록 CRUD 기능
-- 로컬 데이터베이스 설정
+- React Query를 통한 서버 상태 관리
+- Redux Toolkit / Zustand를 통한 클라이언트 상태 관리
+- 로컬 저장소 설정 (localStorage + IndexedDB)
 
 ### 8.2 Phase 2 - 3-4주
-- 실시간 녹음 기능 (record 패키지)
+- 실시간 녹음 기능 (Web Audio API, MediaRecorder API)
 - AWS Lambda AI 분석 함수 구현
-- AWS S3 파일 업로드/관리
-- 캘린더 뷰 (table_calendar)
-- 통계 기능 (fl_chart)
+- AWS S3 파일 업로드/관리 (Presigned URL)
+- 캘린더 뷰 (react-calendar 또는 커스텀 컴포넌트)
+- 통계 기능 (Recharts)
 - 그룹 기능 구현
 - 게시판 기능 구현
+- WebSocket 실시간 동기화 (Socket.io)
 - CloudWatch 모니터링 설정
-- 오프라인 지원 강화
+- 오프라인 지원 강화 (Service Worker, IndexedDB)
+- React Router를 통한 라우팅 최적화
 
 ### 8.3 Phase 3 - 2-3주
 - 칭호/도전과제 시스템 구현
-- 공유 기능 (share_plus)
-- AWS SNS 알림 시스템
+- 공유 기능 (Web Share API)
+- AWS SNS 알림 시스템 (이메일, 웹 푸시)
 - 고급 AI 분석 (SageMaker)
-- 웹/모바일 최적화
+- 웹 성능 최적화 (코드 스플리팅, lazy loading)
 - CloudFront CDN 설정
-- 앱스토어 배포 준비
+- PWA (Progressive Web App) 지원
+- SEO 최적화
+- 배포 파이프라인 구축 (CI/CD)
 
 ## 9. 추가 고려사항
 
@@ -373,34 +398,41 @@ dependencies:
 - 통합 테스트
 - E2E 테스트
 
-## 10. Flutter 기술적 도전 과제
+## 10. React 기술적 도전 과제
 
 ### 10.1 AI 음성 분석
-- **Flutter record 패키지**: 실시간 음성 녹음
-- **AWS S3 업로드**: 대용량 오디오 파일 처리
+- **Web Audio API / MediaRecorder API**: 실시간 음성 녹음
+- **AWS S3 업로드**: 대용량 오디오 파일 처리 (Presigned URL, 멀티파트 업로드)
 - **AWS Lambda**: 서버리스 AI 분석 함수
 - **SageMaker**: 커스텀 AI 모델 배포
 - **SQS 큐잉**: 배치 처리 및 비동기 분석
+- **Web Workers**: 오디오 파일 처리 시 메인 스레드 블로킹 방지
 
 ### 10.2 파일 관리
-- **임시 파일**: path_provider로 앱 디렉토리 관리
+- **Blob API**: 브라우저 내 오디오 파일 관리
 - **AWS S3**: 대용량 오디오 파일 저장
 - **Lambda 자동 삭제**: S3 Lifecycle 정책 + Lambda 함수
-- **메모리 최적화**: Stream 기반 파일 처리
+- **메모리 최적화**: Stream 기반 파일 처리, 청크 단위 업로드
 - **백업 전략**: PostgreSQL + S3 이중 저장
+- **IndexedDB**: 오프라인 파일 캐싱
 
 ### 10.3 실시간 기능
-- **WebSocket + PostgreSQL LISTEN/NOTIFY**: 실시간 데이터 동기화
-- **AWS SNS**: 푸시 알림 및 이벤트 처리
+- **WebSocket (Socket.io) + PostgreSQL LISTEN/NOTIFY**: 실시간 데이터 동기화
+- **AWS SNS**: 이메일/웹 푸시 알림 및 이벤트 처리
 - **CloudWatch Events**: Lambda 트리거 및 모니터링
-- **Provider/Riverpod**: 상태 관리
-- **오프라인 지원**: 로컬 캐싱 + PostgreSQL 동기화
+- **React Query**: 서버 상태 관리 및 실시간 데이터 동기화
+- **Redux Toolkit / Zustand**: 클라이언트 상태 관리
+- **오프라인 지원**: Service Worker + IndexedDB 캐싱 + PostgreSQL 동기화
 
-### 10.4 크로스 플랫폼 최적화
-- **반응형 UI**: LayoutBuilder, MediaQuery 활용
-- **플랫폼별 최적화**: Platform.isAndroid/iOS 분기
-- **웹 최적화**: Flutter Web + CloudFront CDN
-- **PWA 지원**: 웹 앱 매니페스트 설정
+### 10.4 웹 최적화
+- **반응형 UI**: Tailwind CSS 반응형 클래스, CSS Grid, Flexbox 활용
+- **성능 최적화**: React.memo, useMemo, useCallback을 통한 리렌더링 최적화
+- **코드 스플리팅**: React.lazy, Suspense를 통한 동적 임포트
+- **번들 최적화**: Vite 빌드 최적화, Tree shaking
+- **웹 최적화**: React 앱 + CloudFront CDN
+- **PWA 지원**: Service Worker, Web App Manifest 설정
+- **SEO 최적화**: React Helmet, SSR 고려 (Next.js로 마이그레이션 검토)
 - **AWS 최적화**: EC2 t3.micro 최적화 + Lambda 콜드 스타트 최적화
+- **캐싱 전략**: React Query 캐싱, HTTP 캐싱 헤더, CloudFront 캐싱
 
 
